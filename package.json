@@ -2,10 +2,11 @@
   "name": "se_project_express",
   "version": "1.0.0",
   "description": "backend",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ."
+    "lint": "npx eslint .",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -18,13 +19,17 @@
   },
   "homepage": "https://github.com/Kenya-P/se_project_express#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2",
+    "validate": "^5.2.0",
+    "validator": "^13.15.0"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-import": "^2.31.0",
+    "nodemon": "^3.1.9",
     "prettier": "^2.8.8"
   }
 }
