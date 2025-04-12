@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const clothingItemSchema = new mongoose.Schema({
 
@@ -39,4 +40,4 @@ const clothingItemSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('user', clothingItemSchema);
+module.exports = mongoose.model('clothingItem', clothingItemSchema);
