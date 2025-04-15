@@ -3,10 +3,10 @@ const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR } = require('../utils/erro
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.send(users))
     .catch((err) => {
       console.error(err);
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server" });
     })
 
 }
@@ -27,15 +27,14 @@ const createUser = (req, res) => {
 const getUserId = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .orFail(() => {
-      throw new Error('User not found');
-    })
-    .then((user) => res.status(200).send(user))
+    .orFail()
+    .then((user) => res.send(user))
     .catch((err) => {
       console.error(err);
       if (err.name === 'DocumentNotFoundError') {
         return res.status(NOT_FOUND).send({ message: err.message });
-      } else if (err.name === 'CastError') {
+      }
+      if (err.name === 'CastError') {
         return res.status(BAD_REQUEST).send({ message: 'Invalid user ID' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
