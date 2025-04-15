@@ -23,7 +23,7 @@ const getItems = (req, res) => {
     .then((items) => res.send(items))
     .catch((err) => {
       console.error(err);
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(NAL_SERVER_ERROR).send({ message: err.message });
     });
 }
 
@@ -42,7 +42,7 @@ const deleteItem = (req, res) => {
     if (err.name === 'DocumentNotFoundError') {
       return res.status(NOT_FOUND).send({ message: 'Item not found' });
     }
-    return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+    return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server" });
   });
 }
 
