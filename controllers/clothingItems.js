@@ -1,4 +1,4 @@
-const { NOT_FOUND, BAD_REQUEST, INTERNAL_SERVER_ERROR } = require('../utils/errors');
+const { NOT_FOUND, BAD_REQUEST, INTERNAL_SERVER_ERROR, FORBIDDEN} = require('../utils/errors');
 const ClothingItem = require('../models/clothingItem');
 
 
@@ -31,19 +31,28 @@ const getItems = (req, res) => {
 const deleteItem = (req, res) => {
   const {itemId} = req.params;
 
-  ClothingItem.findByIdAndDelete(itemId)
-  .orFail()
-  .then((item) => res.send(item))
-  .catch((err) => {
-    console.error(err);
-    if (err.name === 'CastError') {
-      return res.status(BAD_REQUEST).send({ message: 'Invalid item ID' });
-    }
-    if (err.name === 'DocumentNotFoundError') {
-      return res.status(NOT_FOUND).send({ message: 'Item not found' });
-    }
-    return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server" });
-  });
+  ClothingItem.findById(itemId)
+    .orFail()
+    .then((item) => {
+      if (item.owner.toString() !== req.user._id) {
+        return Promise.reject({ statusCode: FORBIDDEN, message: 'You do not have permission to delete this item' });
+      }
+      return ClothingItem.findByIdAndDelete(itemId);
+    })
+    .then((item) => res.send(item))
+    .catch((err) => {
+      console.error(err);
+      if (err.statusCode === FORBIDDEN) {
+        return res.status(FORBIDDEN).send({ message: err.message });
+      }
+      if (err.name === 'CastError') {
+        return res.status(BAD_REQUEST).send({ message: 'Invalid item ID' });
+      }
+      if (err.name === 'DocumentNotFoundError') {
+        return res.status(NOT_FOUND).send({ message: 'Item not found' });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occurred on the server" });
+    });
 }
 
 const likeItem = (req, res) => {
