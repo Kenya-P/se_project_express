@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, CONFLICT, UNAUTHORIZED } = require('../utils/errors');
+const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, CONFLICT, UNAUTHORIZED, OK, CREATED} = require('../utils/errors');
 const {JWT_SECRET} = require('../utils/config');
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.send(users))
+    .then((users) => res.status(OK).send(users))
     .catch((err) => {
       console.error(err);
       return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server" });
@@ -20,12 +20,12 @@ const createUser = (req, res) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
       expiresIn: "7d",
     });
-    res.send({ token });
+    res.status(CREATED).send({ token });
     })
     .catch((err) => {
       console.error(err);
       if (err.name === 'ValidationError') {
-        return res.status(BAD_REQUEST).send({ message: err.message });
+        return res.status(BAD_REQUEST).send({ message: 'Name must be between 2 and 30 characters' });
       }
       if (err.code === 11000) {
         return res.status(CONFLICT).send({ message: 'User with this email already exists' });
@@ -35,10 +35,10 @@ const createUser = (req, res) => {
 }
 
 const getCurrentUser = (req, res) => {
-  const { userId } = req.user;
+  const { userId } = req.user._id;
   User.findById(userId)
     .orFail()
-    .then((user) => res.send(user))
+    .then((user) => res.status(OK).send(user))
     .catch((err) => {
       console.error(err);
       if (err.name === 'DocumentNotFoundError') {
@@ -60,7 +60,7 @@ const logIn = (req, res) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      res.send({ token });
+      res.status(OK).send({ token });
     })
     .catch((err) => {
       res.status(UNAUTHORIZED).send({ message: err.message });
@@ -75,7 +75,7 @@ const updateProfile = (req, res) => {
     { new: true, runValidators: true }
   )
     .orFail()
-    .then((user) => res.send(user))
+    .then((user) => res.status(OK).send(user))
     .catch((err) => {
       console.error(err);
       if (err.name === 'DocumentNotFoundError') {

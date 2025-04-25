@@ -1,4 +1,4 @@
-const { NOT_FOUND, BAD_REQUEST, INTERNAL_SERVER_ERROR, FORBIDDEN} = require('../utils/errors');
+const { NOT_FOUND, BAD_REQUEST, INTERNAL_SERVER_ERROR, FORBIDDEN, CREATED, OK} = require('../utils/errors');
 const ClothingItem = require('../models/clothingItem');
 
 
@@ -8,7 +8,7 @@ const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
 
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
-    .then((item) => res.status(201).send(item))
+    .then((item) => res.status(CREATED).send(item))
     .catch((err) => {
       console.error(err);
       if (err.name === 'ValidationError') {
@@ -20,7 +20,7 @@ const createItem = (req, res) => {
 
 const getItems = (req, res) => {
   ClothingItem.find({})
-    .then((items) => res.send(items))
+    .then((items) => res.status(OK).send(items))
     .catch((err) => {
       console.error(err);
       return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
@@ -39,7 +39,7 @@ const deleteItem = (req, res) => {
         }
       return ClothingItem.findByIdAndDelete(itemId);
     })
-    .then((item) => res.send(item))
+    .then((item) => res.status(OK).send(item))
     .catch((err) => {
       console.error(err);
       if (err.statusCode === FORBIDDEN) {
@@ -64,7 +64,7 @@ const likeItem = (req, res) => {
     { new: true },
   )
     .orFail()
-    .then((item) => res.status(200).send(item))
+    .then((item) => res.status(OK).send(item))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         return res.status(NOT_FOUND).send({ message: 'Item not found' });
@@ -85,7 +85,7 @@ const dislikeItem = (req, res) => {
     { new: true },
   )
     .orFail()
-    .then((item) => res.status(200).send(item))
+    .then((item) => res.status(OK).send(item))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         return res.status(NOT_FOUND).send({ message: 'Item not found' });
