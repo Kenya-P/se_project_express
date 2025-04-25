@@ -1,7 +1,7 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, CONFLICT, UNAUTHORIZED } = require('../utils/errors');
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = require('../utils/config').JWT_SECRET;
+const {JWT_SECRET} = require('../utils/config');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -16,7 +16,12 @@ const getUsers = (req, res) => {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
   User.create({ name, avatar, email, password })
-    .then((user) => res.status(201).send(user))
+  .then((user) => {
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    res.send({ token });
+    })
     .catch((err) => {
       console.error(err);
       if (err.name === 'ValidationError') {
@@ -64,7 +69,7 @@ const logIn = (req, res) => {
 
 const updateProfile = (req, res) => {
   const { name, avatar } = req.body;
-  new User.findByIdAndUpdate(
+  User.findByIdAndUpdate(
     req.user._id,
     { name, avatar },
     { new: true, runValidators: true }
