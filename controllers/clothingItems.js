@@ -42,7 +42,7 @@ const deleteItem = (req, res) => {
     .then((item) => res.status(OK).send(item))
     .catch((err) => {
       console.error(err);
-      if (err.name === FORBIDDEN) {
+      if (err.message === 'You do not have permission to delete this item') {
         return res.status(FORBIDDEN).send({ message: err.message });
       }
       if (err.name === 'CastError') {

@@ -26,7 +26,7 @@ const createUser = (req, res) => {
 }
 
 const getCurrentUser = (req, res) => {
-  const { userId } = req.user._id;
+  const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => res.status(OK).send(user))
@@ -45,6 +45,10 @@ const getCurrentUser = (req, res) => {
 const logIn = (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(BAD_REQUEST).send({ message: 'Email and password are required' });
+  }
+
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -53,7 +57,10 @@ const logIn = (req, res) => {
       res.status(OK).send({ token });
     })
     .catch((err) => {
-      res.status(UNAUTHORIZED).send({ message: err.message });
+      if (err.message === "Incorrect email or password") {
+        return res.status(UNAUTHORIZED).send({ message: err.message });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occurred on the server" });
     });
 };
 
