@@ -42,7 +42,7 @@ const deleteItem = (req, res) => {
     .then((item) => res.status(OK).send(item))
     .catch((err) => {
       console.error(err);
-      if (err.statusCode === FORBIDDEN) {
+      if (err.name === FORBIDDEN) {
         return res.status(FORBIDDEN).send({ message: err.message });
       }
       if (err.name === 'CastError') {

@@ -35,9 +35,24 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'The password field is required'],
     select: false,
-    minlength: 8
   },
 });
+
+userSchema.statics.findUserByCredentials = function(email, password) {
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Incorrect email or password'));
+      }
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new Error('Incorrect email or password'));
+          }
+          return user;
+        });
+    });
+};
 
 userSchema.pre('save', async function hashPassword(next) {
   if (this.isModified('password')) {

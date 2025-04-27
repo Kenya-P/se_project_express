@@ -3,15 +3,6 @@ const User = require('../models/user');
 const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, CONFLICT, UNAUTHORIZED, OK, CREATED} = require('../utils/errors');
 const {JWT_SECRET} = require('../utils/config');
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(OK).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server" });
-    })
-
-}
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -55,7 +46,6 @@ const logIn = (req, res) => {
   const { email, password } = req.body;
 
   User.findUserByCredentials(email, password)
-  User.findOne({ email}).select('+password')
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
@@ -91,4 +81,4 @@ const updateProfile = (req, res) => {
     })
 }
 
-module.exports = { getUsers, createUser, getCurrentUser, logIn, updateProfile };
+module.exports = { createUser, getCurrentUser, logIn, updateProfile };
