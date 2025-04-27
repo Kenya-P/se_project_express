@@ -22,8 +22,8 @@ const createUser = (req, res) => {
         return res.status(CONFLICT).send({ message: 'User with this email already exists' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server" });
-    })
-}
+    });
+};
 
 const getCurrentUser = (req, res) => {
   const userId = req.user._id;
@@ -39,8 +39,8 @@ const getCurrentUser = (req, res) => {
         return res.status(BAD_REQUEST).send({ message: 'Invalid user ID' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server"});
-    })
-}
+    });
+};
 
 const logIn = (req, res) => {
   const { email, password } = req.body;
@@ -49,18 +49,18 @@ const logIn = (req, res) => {
     return res.status(BAD_REQUEST).send({ message: 'Email and password are required' });
   }
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      res.status(OK).send({ token });
+        return res.status(OK).send({ token });
     })
     .catch((err) => {
       if (err.message === "Incorrect email or password") {
         return res.status(UNAUTHORIZED).send({ message: err.message });
       }
-      return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occurred on the server" });
+        return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -85,7 +85,7 @@ const updateProfile = (req, res) => {
         return res.status(BAD_REQUEST).send({ message: 'Invalid user ID' });
       }
       return res.status(INTERNAL_SERVER_ERROR).send({ message: "An error has occured on the server" });
-    })
-}
+    });
+};
 
 module.exports = { createUser, getCurrentUser, logIn, updateProfile };
