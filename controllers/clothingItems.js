@@ -1,5 +1,5 @@
 const { NOT_FOUND, BAD_REQUEST, INTERNAL_SERVER_ERROR, FORBIDDEN, CREATED, OK} = require('../utils/errors');
-const ClothingItem = require('../models/clothingItem');
+const clothingItem = require('../models/clothingItem');
 
 
 const createItem = (req, res) => {
@@ -7,7 +7,7 @@ const createItem = (req, res) => {
 
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
+  clothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => res.status(CREATED).send(item))
     .catch((err) => {
       console.error(err);
@@ -19,7 +19,7 @@ const createItem = (req, res) => {
 }
 
 const getItems = (req, res) => {
-  ClothingItem.find({})
+  clothingItem.find({})
     .then((items) => res.status(OK).send(items))
     .catch((err) => {
       console.error(err);
@@ -31,13 +31,13 @@ const getItems = (req, res) => {
 const deleteItem = (req, res) => {
   const {itemId} = req.params;
 
-  ClothingItem.findById(itemId)
+  clothingItem.findById(itemId)
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== req.user._id) {
         return Promise.reject(new Error('You do not have permission to delete this item'));
         }
-      return ClothingItem.findByIdAndDelete(itemId);
+      return clothingItem.findByIdAndDelete(itemId);
     })
     .then((item) => res.status(OK).send(item))
     .catch((err) => {
@@ -58,7 +58,7 @@ const deleteItem = (req, res) => {
 const likeItem = (req, res) => {
   const { itemId } = req.params;
 
-  ClothingItem.findByIdAndUpdate(
+  clothingItem.findByIdAndUpdate(
     itemId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
@@ -79,7 +79,7 @@ const likeItem = (req, res) => {
 const dislikeItem = (req, res) => {
   const { itemId } = req.params;
 
-  ClothingItem.findByIdAndUpdate(
+  clothingItem.findByIdAndUpdate(
     itemId,
     { $pull: { likes: req.user._id } },
     { new: true },

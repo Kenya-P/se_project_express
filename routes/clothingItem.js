@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { createItem, getItems, deleteItem, likeItem, dislikeItem } = require('../controllers/clothingItems');
 const auth = require('../middlewares/auth');
 
-// The following routes are for creating, getting, and deleting clothing items
+// The following routes are for creating, getting, deleting clothing items
 router.post('/', auth, createItem);
 router.get('/', getItems);
 router.delete('/:itemId', auth, deleteItem);
