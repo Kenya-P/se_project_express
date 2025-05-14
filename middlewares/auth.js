@@ -3,6 +3,10 @@ const {JWT_SECRET} = require('../utils/config');
 const { UNAUTHORIZED } = require('../utils/errors');
 
 const auth = (req, res, next) => {
+
+console.log("Auth header:", authorization);
+console.log("Decoded user:", payload);
+
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {

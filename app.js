@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const mainRouter = require('./routes/index');
 const { logIn, createUser } = require('./controllers/users');
+const userRoutes = require('./routes/users');
 
 const app = express();
 
@@ -21,10 +22,13 @@ mongoose
 });
 
 app.use(express.json());
+app.use(userRoutes);
 
 
 app.post('/signin', logIn);
 app.post('/signup', createUser);
+
+app.use("/signup", userRoutes);
 
 app.use("/", mainRouter);
 
