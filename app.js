@@ -22,15 +22,10 @@ mongoose
 });
 
 app.use(express.json());
-app.use(userRoutes);
 
+app.use('/', userRoutes);
 
-app.post('/signin', logIn);
-app.post('/signup', createUser);
-
-app.use("/signup", userRoutes);
-
-app.use("/", mainRouter);
+//app.use("/", mainRouter);
 
 
 app.listen(PORT, () => {

@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
-const {JWT_SECRET} = require('../utils/config');
+const { JWT_SECRET } = require('../utils/config');
 const { UNAUTHORIZED } = require('../utils/errors');
 
 const auth = (req, res, next) => {
-
-console.log("Auth header:", authorization);
-console.log("Decoded user:", payload);
-
+  // Define 'authorization' first
   const { authorization } = req.headers;
+
+  // Log the 'authorization' after it's defined
+  console.log("Auth header:", authorization);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res.status(UNAUTHORIZED).send({ message: 'Authorization required' });
@@ -22,6 +22,9 @@ console.log("Decoded user:", payload);
   } catch (err) {
     return res.status(UNAUTHORIZED).send({ message: 'Invalid/expired token' });
   }
+
+  // Log 'payload' after it's defined
+  console.log("Decoded user:", payload);
 
   req.user = payload;
 
