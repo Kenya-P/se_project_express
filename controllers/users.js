@@ -2,11 +2,20 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR, CONFLICT, UNAUTHORIZED, OK, CREATED} = require('../utils/errors');
 const {JWT_SECRET} = require('../utils/config');
+const bcrypt = require('bcryptjs');
 
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-  User.create({ name, avatar, email, password })
+  bcrypt.hash(password, 10)
+  .then((hashedPassword) => {
+    return User.create({
+      name,
+      avatar,
+      email,
+      password: hashedPassword
+    });
+  })
   .then((user) => {
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
       expiresIn: "7d",
@@ -16,7 +25,7 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === 'ValidationError') {
-        return res.status(BAD_REQUEST).send({ message: 'Name must be between 2 and 30 characters' });
+        return res.status(BAD_REQUEST).send({ message: err.message });
       }
       if (err.code === 11000) {
         return res.status(CONFLICT).send({ message: 'User with this email already exists' });
