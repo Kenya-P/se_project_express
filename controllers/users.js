@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-  bcrypt.hash(password, 10)
+  bcrypt.hash(password.trim(), 10)
   .then((hashedPassword) => {
     return User.create({
       name,
@@ -58,7 +58,7 @@ const logIn = (req, res) => {
     return res.status(BAD_REQUEST).send({ message: 'Email and password are required' });
   }
 
-  return User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password.trim())
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",

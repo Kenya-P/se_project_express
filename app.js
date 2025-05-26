@@ -27,6 +27,9 @@ app.use('/', userRoutes);
 
 //app.use("/", mainRouter);
 
+const routes = require('./routes');
+app.use(routes);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
