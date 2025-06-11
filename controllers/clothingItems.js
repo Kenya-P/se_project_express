@@ -97,4 +97,21 @@ const dislikeItem = (req, res) => {
     });
 };
 
-module.exports = { createItem, getItems, deleteItem, likeItem, dislikeItem };
+const getItemById = (req, res) => {
+  const { itemId } = req.params;
+
+  clothingItem.findById(itemId)
+    .orFail()
+    .then((item) => res.status(OK).send(item))
+    .catch((err) => {
+      if (err.name === 'DocumentNotFoundError') {
+        return res.status(NOT_FOUND).send({ message: 'Item not found' });
+      }
+      if (err.name === 'CastError') {
+        return res.status(BAD_REQUEST).send({ message: 'Invalid item ID' });
+      }
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: 'An error has occurred on the server.' });
+    });
+}
+
+module.exports = { createItem, getItems, deleteItem, likeItem, dislikeItem, getItemById };
