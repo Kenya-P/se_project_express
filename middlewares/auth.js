@@ -15,20 +15,27 @@ const auth = (req, res, next) => {
 
   const token = authorization.replace('Bearer ', '');
 
-  let payload;
 
   try {
-    payload = jwt.verify(token, JWT_SECRET);
+    req.user = jwt.verify(token, JWT_SECRET);
+    next();
   } catch (err) {
     return res.status(UNAUTHORIZED).send({ message: 'Invalid/expired token' });
   }
-
-  // Log 'payload' after it's defined
-  console.log("Decoded user:", payload);
-
-  req.user = payload;
-
-  return next();
 };
 
-module.exports = auth;
+// Optional authentication middleware
+const optionalAuth = (req, res, next) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return next();
+
+  try {
+    req.user = jwt.verify(token, JWT_SECRET);
+  } catch (err) {
+    console.warn('optionalAuth: invalid token ignored');
+    // Don't set req.user, just continue as guest
+  }
+  next();
+};
+
+module.exports = { auth, optionalAuth };

@@ -29,6 +29,10 @@ const clothingItemSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
+  isPublic: {
+    type: Boolean,
+    default: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -18,14 +18,30 @@ const createItem = (req, res) => {
     });
 }
 
-const getItems = (req, res) => {
+/*const getItems = (req, res) => {
   clothingItem.find({})
     .then((items) => res.status(OK).send(items))
     .catch((err) => {
       console.error(err);
       return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });
-}
+}*/
+
+const getItems = (req, res) => {
+  const userId = req.user?._id;
+
+  const query = userId
+    ? { $or: [{ owner: userId }, { isPublic: true }] }
+    : { isPublic: true };
+
+  clothingItem.find(query)
+    .then((items) => res.status(OK).send(items))
+    .catch((err) => {
+      console.error(err);
+      res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+    });
+};
+
 
 
 const deleteItem = (req, res) => {
