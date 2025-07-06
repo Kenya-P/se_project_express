@@ -4,6 +4,9 @@ const cors = require('cors');
 const mainRouter = require('./routes/index');
 const { logIn, createUser } = require('./controllers/users');
 const userRoutes = require('./routes/users');
+const errorHandler = require('./middlewares/errorHandler');
+const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 
@@ -27,6 +30,9 @@ app.use('/', userRoutes);
 
 //app.use("/", mainRouter);
 
+// Middleware for logging requests
+app.use(requestLogger);
+
 const routes = require('./routes');
 app.use(routes);
 
@@ -34,3 +40,12 @@ app.use(routes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// Middleware for logging errors
+app.use(errorLogger);
+
+// celebrate error handling
+app.use(errors());
+
+// error handling middleware
+app.use(errorHandler);
