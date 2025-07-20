@@ -2,7 +2,7 @@ const {CREATED, OK} = require('../utils/errors');
 const clothingItem = require('../models/clothingItem');
 const { BadRequestError, ForbiddenError, NotFoundError } = require('../errors/customErrors');
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   console.log(req.body);
 
   const { name, weather, imageUrl } = req.body;
@@ -18,7 +18,7 @@ const createItem = (req, res) => {
     });
 }
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   const userId = req.user?._id;
 
   const query = userId
@@ -56,7 +56,7 @@ const deleteItem = (req, res, next) => {
 };
 
 
-const likeItem = (req, res) => {
+const likeItem = (req, res, next) => {
   const { itemId } = req.params;
 
   clothingItem.findByIdAndUpdate(
@@ -77,7 +77,7 @@ const likeItem = (req, res) => {
     });
 };
 
-const dislikeItem = (req, res) => {
+const dislikeItem = (req, res, next) => {
   const { itemId } = req.params;
 
   clothingItem.findByIdAndUpdate(
@@ -98,7 +98,7 @@ const dislikeItem = (req, res) => {
     });
 };
 
-const getItemById = (req, res) => {
+const getItemById = (req, res, next) => {
   const { itemId } = req.params;
 
   clothingItem.findById(itemId)

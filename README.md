@@ -23,3 +23,12 @@ The back-end project is focused on creating a server for the WTWR application. W
 
 ### Links:
 - Link to the project on Github: [(https://github.com/Kenya-P/se_project_express)]
+
+####
+
+Created a subdomain name using [https://freedns.afraid.org/subdomain/]
+- wtwr-kenya.crabdance.com	A	35.237.6.54
+- www.wtwr-kenya.crabdance.com
+- api.wtwr-kenya.crabdance.com
+
+
