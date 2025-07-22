@@ -2,16 +2,17 @@ const { Joi, celebrate } = require('celebrate');
 const validator = require('validator');
 
 const validateURL = (value, helpers) => {
-  if (!validator.isURL(value)) {
+  if (validator.isURL(value)) {
     return value;
   }
   return helpers.error('string.uri');
 };
 
+
 const validateCreateItem = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    weather: Joi.string().required().validate('hot', 'warm', 'cold'),
+    weather: Joi.string().required().valid('hot', 'warm', 'cold'),
     imageUrl: Joi.string().required().custom(validateURL).messages({
       'string.empty': 'The "imageUrl" field must be filled in',
       'string.uri': 'The "imageUrl" field must be a valid URL',
@@ -60,6 +61,14 @@ const validateCardBody = celebrate({
   }),
 });
 
+const validateUpdateUser = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    avatar: Joi.string().custom(validateURL),
+  }),
+});
+
+
 module.exports = {
   validateURL,
   validateCreateItem,
@@ -67,4 +76,5 @@ module.exports = {
   validateLogin,
   validateId,
   validateCardBody,
+  validateUpdateUser,
 };

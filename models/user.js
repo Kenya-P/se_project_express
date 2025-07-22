@@ -53,7 +53,7 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
           console.log("Result:", matched);
           return Promise.reject(new Error('Incorrect email or password'));
           }
-          console.log("✅ User authenticated successfully:", user._email);
+          console.log("✅ User authenticated successfully:", user.email);
           return user;
         });
     });

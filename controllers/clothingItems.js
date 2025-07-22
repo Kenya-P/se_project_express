@@ -1,6 +1,9 @@
-const {CREATED, OK} = require('../utils/errors');
+const {CREATED, OK} = require('../utils/statusCode');
 const clothingItem = require('../models/clothingItem');
-const { BadRequestError, ForbiddenError, NotFoundError } = require('../errors/customErrors');
+const BadRequestError = require('../errors/badRequestError');
+const NotFoundError = require('../errors/notFoundError');
+const ForbiddenError = require('../errors/forbiddenError');
+
 
 const createItem = (req, res, next) => {
   console.log(req.body);
@@ -19,16 +22,11 @@ const createItem = (req, res, next) => {
 }
 
 const getItems = (req, res, next) => {
-  const userId = req.user?._id;
-
-  const query = userId
-    ? { $or: [{ owner: userId }, { isPublic: true }] }
-    : { isPublic: true };
-
-  clothingItem.find(query)
+  clothingItem.find({})
     .then((items) => res.status(OK).send(items))
     .catch(next);
 };
+
 
 
 
@@ -98,21 +96,4 @@ const dislikeItem = (req, res, next) => {
     });
 };
 
-const getItemById = (req, res, next) => {
-  const { itemId } = req.params;
-
-  clothingItem.findById(itemId)
-    .orFail()
-    .then((item) => res.status(OK).send(item))
-    .catch((err) => {
-      if (err.name === 'DocumentNotFoundError') {
-        return next(new NotFoundError(err.message));
-      }
-      if (err.name === 'CastError') {
-        return next(new BadRequestError(err.message));
-      }
-      return next(err);
-    });
-}
-
-module.exports = { createItem, getItems, deleteItem, likeItem, dislikeItem, getItemById };
+module.exports = { createItem, getItems, deleteItem, likeItem, dislikeItem };

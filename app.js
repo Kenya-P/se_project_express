@@ -3,11 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const mainRouter = require('./routes/index');
-const { logIn, createUser } = require('./controllers/users');
-const userRoutes = require('./routes/users');
-const errorHandler = require('./middlewares/errorHandler');
 const { errors } = require('celebrate');
+const errorHandler = require('./middlewares/errorHandler');
+const routes = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
@@ -28,11 +26,9 @@ mongoose
 
 app.use(express.json());
 
-app.use('/', userRoutes);
+app.use('/users', require('./routes/users'));
 
-//app.use("/", mainRouter);
-
-//crash test route
+// crash test route
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Server will crash now');
@@ -42,7 +38,6 @@ app.get('/crash-test', () => {
 // Middleware for logging requests
 app.use(requestLogger);
 
-const routes = require('./routes');
 app.use(routes);
 
 
