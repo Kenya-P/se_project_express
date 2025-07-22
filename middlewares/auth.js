@@ -13,10 +13,11 @@ const auth = (req, res, next) => {
 
   try {
     req.user = jwt.verify(token, JWT_SECRET);
-    next();
+    return next();
   } catch (err) {
-    next(new UnauthorizedError('Invalid or expired token'));
+    return next(new UnauthorizedError('Invalid or expired token'));
   }
+
 };
 
 // Optional authentication: doesn't throw, just skips if token is bad
@@ -30,7 +31,6 @@ const optionalAuth = (req, res, next) => {
     console.warn('Invalid token, skipping authentication');
     return next();
   }
-
   return next();
 };
 

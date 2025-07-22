@@ -20,8 +20,17 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    'no-unused-vars': ['error', { 'argsIgnorePattern': 'next' }],
-    'no-underscore-dangle': ['error', { 'allow': ['_id'] }],
-    'no-console': 'off',
+  'import/extensions': ['error', 'always', {
+    js: 'never',
+    json: 'always'
+  }],
+  'no-underscore-dangle': ['error', { allow: ['_id'] }]
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.json']
+      }
+    }
+  }
 };

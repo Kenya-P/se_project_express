@@ -1,4 +1,4 @@
-const {CREATED, OK} = require('../utils/statusCode');
+const {CREATED, OK} = require('../utils/statusCodes');
 const clothingItem = require('../models/clothingItem');
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
@@ -13,7 +13,6 @@ const createItem = (req, res, next) => {
   clothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => res.status(CREATED).send(item))
     .catch((err) => {
-      console.error(err);
       if (err.name === 'ValidationError') {
         return next(new BadRequestError(err.message));
       }

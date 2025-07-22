@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { JWT_SECRET } = require('../utils/config');
-const { OK } = require('../utils/statusCodes.js');
+const { OK } = require('../utils/statusCodes');
 const ConflictError = require('../errors/conflictError');
 const BadRequestError = require('../errors/badRequestError');
 const InternalServerError = require('../errors/internalServerError');
@@ -31,13 +31,12 @@ const createUser = (req, res, next) => {
     });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
     .orFail()
     .then((user) => res.status(OK).send(user))
     .catch((err) => {
-      console.error(err);
       if (err.name === 'DocumentNotFoundError') {
         return next(new NotFoundError('User not found'));
       }
@@ -48,12 +47,13 @@ const getCurrentUser = (req, res) => {
     });
 };
 
-const logIn = (req, res) => {
+const logIn = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-        return next(new BadRequestError(err.message));
+    return next(new BadRequestError('Email and password are required'));
   }
+
 
   return User.findUserByCredentials(email, password.trim())
     .then((user) => {
