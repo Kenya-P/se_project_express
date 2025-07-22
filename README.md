@@ -36,6 +36,7 @@ The project handles user registration, login, and secure access to a personalize
 ├── package.json
 └── README.md
 
+
 ## 🚀 Features
 
 ### 👤 User Routes
@@ -93,7 +94,7 @@ The project handles user registration, login, and secure access to a personalize
 
 
 ## 🌐 Deployment
-Backend URL: [https:/api.wtwr-kenya.crabdance.com]
+Backend URL: [https://api.wtwr-kenya.crabdance.com]
 
 Frontend URL: [https://wtwr-kenya.crabdance.com/]
 
