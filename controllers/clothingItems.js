@@ -1,4 +1,4 @@
-const {CREATED, OK} = require('../utils/statusCodes');
+const {CREATED, OK} = require('../utils/statusCodes.js');
 const clothingItem = require('../models/clothingItem');
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
@@ -23,8 +23,9 @@ const createItem = (req, res, next) => {
 const getItems = (req, res, next) => {
   clothingItem.find({})
     .then((items) => res.status(OK).send(items))
-    .catch(next);
+    .catch((err) => next(err));
 };
+
 
 
 
