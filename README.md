@@ -21,8 +21,7 @@ The project handles user registration, login, and secure access to a personalize
 - Winston & Morgan (logging)
 - Git & GitHub
 
-## 🗂️ Project Structure
-- 
+## 🗂️ Project Structure 
 ├── controllers/        # Route controllers
 ├── middlewares/        # Auth, error handling
 ├── errors/             # Custom error classes
