@@ -22,7 +22,7 @@ The project handles user registration, login, and secure access to a personalize
 - Git & GitHub
 
 ## 🗂️ Project Structure
-.
+- 
 ├── controllers/        # Route controllers
 ├── middlewares/        # Auth, error handling
 ├── errors/             # Custom error classes
@@ -102,9 +102,9 @@ The backend supports both HTTP and HTTPS connections.
 
 
 ## 🧪 Scripts
-npm run start    # Start the server on port 3001
-npm run dev      # Start server in dev mode with hot reload
-npm run lint     # Run ESLint check
+- npm run start    # Start the server on port 3001
+- npm run dev      # Start server in dev mode with hot reload
+- npm run lint     # Run ESLint check
 
 ## 📦 Environment & Config
 - MongoDB URI: mongodb://localhost:27017/wtwr_db
