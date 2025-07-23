@@ -12,7 +12,17 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const app = express();
 const { PORT = 3001 } = process.env;
 
-app.use(cors());
+const allowedOrigins = [
+  'https://www.wtwr-kenya.crabdance.com',
+  'https://wtwr-kenya.crabdance.com',
+  'http://localhost:3000', // local dev
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // Logger: BEFORE routes
