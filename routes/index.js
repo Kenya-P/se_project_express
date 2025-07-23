@@ -1,12 +1,16 @@
 const router = require('express').Router();
 const clothingItem = require('./clothingItem');
-const userRouter = require('./users');
+const userRoutes = require('./users');
 const NotFoundError = require('../errors/notFoundError');
 
-router.use('/users', userRouter);
+// These handle /signup, /signin, /me, etc.
+router.use(userRoutes);
+
+// This handles /items
 router.use('/items', clothingItem);
 
-router.use((req, res, next) => {
+// Catch-all 404 — must go last
+router.use('*', (req, res, next) => {
   next(new NotFoundError('Requested resource not found'));
 });
 
