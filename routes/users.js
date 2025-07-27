@@ -3,8 +3,8 @@ const { createUser, getCurrentUser, updateProfile, logIn} = require('../controll
 const {auth} = require('../middlewares/auth');
 const { validateCreateUser, validateLogin, validateUpdateUser } = require('../middlewares/validation');
 
-router.post('/signup', validateCreateUser, createUser);  // Add this line to handle POST /signup
-router.post('/signin', validateLogin, logIn); // Add this line to handle POST /signin
+router.post('/users/signup', validateCreateUser, createUser);  // Add this line to handle POST /signup
+router.post('/users/signin', validateLogin, logIn); // Add this line to handle POST /signin
 
 router.get('/users/me', auth, getCurrentUser);
 router.patch('/users/me', auth, validateUpdateUser ,updateProfile);
