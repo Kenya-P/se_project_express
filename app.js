@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const { errors } = require('celebrate');
 const errorHandler = require('./middlewares/errorHandler');
-const userRoutes = require('./routes/users');
 const mainRoutes = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
