@@ -10,7 +10,7 @@ router.use(userRoutes);
 router.use('/items', clothingItem);
 
 // Catch-all 404 — must go last
-router.use('*', (req, res, next) => {
+router.use((req, res, next) => {
   next(new NotFoundError('Requested resource not found'));
 });
 

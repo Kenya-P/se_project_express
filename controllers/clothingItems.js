@@ -1,4 +1,4 @@
-const {CREATED, OK} = require('../utils/statusCodes.js');
+const {CREATED, OK} = require('../utils/statusCodes');
 const clothingItem = require('../models/clothingItem');
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');

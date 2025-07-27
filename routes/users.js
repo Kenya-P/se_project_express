@@ -6,7 +6,7 @@ const { validateCreateUser, validateLogin, validateUpdateUser } = require('../mi
 router.post('/signup', validateCreateUser, createUser);  // Add this line to handle POST /signup
 router.post('/signin', validateLogin, logIn); // Add this line to handle POST /signin
 
-router.get('/me', auth, getCurrentUser);
-router.patch('/me', auth, validateUpdateUser ,updateProfile);
+router.get('/users/me', auth, getCurrentUser);
+router.patch('/users/me', auth, validateUpdateUser ,updateProfile);
 
 module.exports = router;
