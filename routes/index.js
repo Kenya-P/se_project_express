@@ -4,7 +4,7 @@ const userRoutes = require('./users');
 const NotFoundError = require('../errors/notFoundError');
 
 // These handle /signup, /signin, /me, etc.
-router.use(userRoutes);
+router.use('/', userRoutes);
 
 // This handles /items
 router.use('/items', clothingItem);

@@ -40,8 +40,6 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-// Mount signup/signin/user routes at root
-//app.use('/', userRoutes);
 
 // Mount general app routes (items, 404, etc.)
 app.use(mainRoutes);
